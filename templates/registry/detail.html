@@ -1,0 +1,42 @@
+{% extends 'registry/base.html' %}
+{% block content %}
+<div class="card shadow">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <img src="{{ item.image.url }}" class="img-fluid rounded">
+            </div>
+            <div class="col-md-6">
+                <h2>{{ item.name }}</h2>
+                <p class="text-muted">{{ item.description }}</p>
+                <hr>
+                <table class="table table-sm mt-3">
+    <tr><th>Category:</th><td>{{ item.get_category_display }}</td></tr>
+    {% if item.serial_number %}<tr><th>Serial No:</th><td>{{ item.serial_number }}</td></tr>{% endif %}
+    {% if item.purchase_price %}<tr><th>Price:</th><td>${{ item.purchase_price }}</td></tr>{% endif %}
+    {% if item.warranty_expiry %}<tr><th>Warranty Until:</th><td>{{ item.warranty_expiry }}</td></tr>{% endif %}
+</table>
+
+                {% if user == item.owner %}
+                    <div class="alert alert-secondary py-2">
+                        <strong>Owner Controls:</strong>
+                        <div class="mt-2">
+                            <a href="{% url 'edit_item' item.id %}" class="btn btn-warning btn-sm">Edit Details</a>
+
+                            <form action="{% url 'delete_item' item.id %}" method="POST" class="d-inline" onsubmit="return confirm('Delete this item forever?');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm">Delete Item</button>
+                            </form>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="mt-4">
+                    <img src="{{ item.qr_code.url }}" width="150" class="border p-2">
+                    <p class="small text-muted">Permanent QR Code for this asset</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

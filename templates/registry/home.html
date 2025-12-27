@@ -1,0 +1,43 @@
+{% extends 'registry/base.html' %}
+{% block content %}
+<div class="row align-items-center py-5">
+    <div class="col-lg-6">
+        <h1 class="display-4 fw-bold">Manage Assets with <span class="text-primary">QR Intelligence</span></h1>
+        <p class="lead">Register your personal or organizational items, generate unique QR codes instantly, and manage ownership with a single scan.</p>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+            <a href="{% url 'register' %}" class="btn btn-primary btn-lg px-4 me-md-2">Get Started</a>
+            <a href="{% url 'login' %}" class="btn btn-outline-secondary btn-lg px-4">Login</a>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <img src="https://images.unsplash.com/photo-1590247813693-5541d1c609fd?q=80&w=1000&auto=format&fit=crop" 
+             class="d-block mx-lg-auto img-fluid rounded shadow-lg" alt="QR Management" width="700" height="500">
+    </div>
+</div>
+
+<hr class="my-5">
+
+<div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+    <div class="feature col text-center">
+        <div class="feature-icon d-inline-flex align-items-center justify-content-center fs-2 mb-3">
+            📍
+        </div>
+        <h3 class="fs-2 text-body-emphasis">Digital Registry</h3>
+        <p>Upload high-quality images and detailed descriptions for every item you own. Keep a digital twin of your assets.</p>
+    </div>
+    <div class="feature col text-center">
+        <div class="feature-icon d-inline-flex align-items-center justify-content-center fs-2 mb-3">
+            📱
+        </div>
+        <h3 class="fs-2 text-body-emphasis">Instant QR Generation</h3>
+        <p>Every asset receives a unique, unguessable UUID and a permanent QR code image ready for printing.</p>
+    </div>
+    <div class="feature col text-center">
+        <div class="feature-icon d-inline-flex align-items-center justify-content-center fs-2 mb-3">
+            🔒
+        </div>
+        <h3 class="fs-2 text-body-emphasis">Secure Permissions</h3>
+        <p>Toggle items between Public and Private. Only you decide who sees your private asset details.</p>
+    </div>
+</div>
+{% endblock %}

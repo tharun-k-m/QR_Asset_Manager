@@ -1,0 +1,127 @@
+{% extends 'registry/base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow p-4">
+            <h3>Register New Asset</h3>
+            <form method="post" enctype="multipart/form-data" id="asset-form">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label>Item Name</label>
+                    <input type="text" name="name" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label>Image Source</label>
+                    <ul class="nav nav-tabs" id="imageTab" role="tablist">
+
+                        <li class="nav-item">
+                            <button class="nav-link" id="webcam-tab" data-bs-toggle="tab" data-bs-target="#webcam" type="button">Use Webcam</button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link active" id="upload-tab" data-bs-toggle="tab" data-bs-target="#upload" type="button">Upload File</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content border p-3 bg-light">
+                        <div class="tab-pane fade show active" id="upload">
+                            <input type="file" name="image" class="form-control" id="fileInput">
+                        </div>
+                        <div class="tab-pane fade text-center" id="webcam">
+                            <video id="video" width="100%" height="auto" autoplay class="rounded border mb-2"></video>
+                            <canvas id="canvas" style="display:none;"></canvas>
+                            <button type="button" class="btn btn-info btn-sm" id="snap">Capture Photo</button>
+                            <div id="status" class="small mt-1 text-success"></div>
+                            <input type="hidden" name="webcam_image" id="webcam_data">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label>Description</label>
+                    <textarea name="description" class="form-control" rows="3" required></textarea>
+                </div>
+                <div class="row">
+    <div class="col-md-6 mb-3">
+        <label>Category</label>
+        <select name="category" class="form-select">
+            {% for code, name in categories %}
+                <option value="{{ code }}">{{ name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-6 mb-3">
+        <label>Serial Number</label>
+        <input type="text" name="serial_number" class="form-control">
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4 mb-3">
+        <label>Price</label>
+        <input type="number" step="0.01" name="purchase_price" class="form-control">
+    </div>
+    <div class="col-md-4 mb-3">
+        <label>Purchase Date</label>
+        <input type="date" name="purchase_date" class="form-control">
+    </div>
+    <div class="col-md-4 mb-3">
+        <label>Warranty Expiry</label>
+        <input type="date" name="warranty_expiry" class="form-control">
+    </div>
+</div>
+
+                <div class="form-check mb-3">
+                    <input type="checkbox" name="is_public" class="form-check-input" id="pub" checked>
+                    <label class="form-check-label" for="pub">Publicly Viewable</label>
+                </div>
+
+                <button type="submit" class="btn btn-success w-100">Save & Generate QR</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const snap = document.getElementById('snap');
+    const webcamData = document.getElementById('webcam_data');
+    const status = document.getElementById('status');
+    const webcamTabBtn = document.getElementById('webcam-tab');
+
+    let stream = null;
+
+    async function startCamera() {
+        try {
+            stream = await navigator.mediaDevices.getUserMedia({
+                video: { facingMode: "environment" }, // High-quality back cam if on mobile
+                audio: false
+            });
+            video.srcObject = stream;
+        } catch (err) {
+            console.error("Error accessing webcam: ", err);
+            alert("Could not access camera. Please ensure you have granted permission in your browser settings.");
+        }
+    }
+
+    // Triggered when the tab is clicked
+    webcamTabBtn.addEventListener('click', function() {
+        startCamera();
+    });
+
+    // Capture functionality
+    snap.addEventListener('click', () => {
+        if (!stream) {
+            alert("Camera not active!");
+            return;
+        }
+        const context = canvas.getContext('2d');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        const dataURL = canvas.toDataURL('image/png');
+        webcamData.value = dataURL;
+        status.innerHTML = '<span class="badge bg-success">✓ Photo Captured!</span>';
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'registry/base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow p-4">
+            <h3>Edit Asset: {{ item.name }}</h3>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label>Item Name</label>
+                    <input type="text" name="name" class="form-control" value="{{ item.name }}" required>
+                </div>
+                <div class="mb-3">
+                    <label>Description</label>
+                    <textarea name="description" class="form-control" rows="4" required>{{ item.description }}</textarea>
+                </div>
+                <div class="mb-3">
+                    <label>Update Image (Leave blank to keep current)</label>
+                    <input type="file" name="image" class="form-control">
+                </div>
+                <div class="form-check mb-3">
+                    <input type="checkbox" name="is_public" class="form-check-input" id="pub" {% if item.is_public %}checked{% endif %}>
+                    <label class="form-check-label" for="pub">Public Visibility</label>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <a href="{% url 'item_detail' item.id %}" class="btn btn-outline-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
