@@ -24,7 +24,7 @@ Traditional asset tracking often relies on manual spreadsheets or memory, leadin
 
 1. **Clone the repository:**
    ```bash
-   git clone [https://github.com/yourusername/qr-asset-manager.git](https://github.com/yourusername/qr-asset-manager.git)
+   git clone [https://github.com/tharun-k-m/qr-asset-manager.git](https://github.com/tharun-k-m/qr-asset-manager.git)
    cd qr-asset-manager
 
 ```
